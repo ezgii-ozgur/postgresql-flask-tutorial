@@ -3,62 +3,70 @@ from dataclasses import dataclass
 from sqlalchemy import MetaData, Table, Column, ForeignKey, ForeignKeyConstraint
 from sqlalchemy.types import Integer, String, DateTime, Boolean, Uuid
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from db_transaction.models.role_model import Role
 
 
-class Admin:
-    meta = MetaData()
-    patent_table = Table("Admin",
-                         meta,
-                         Column('_id', String, primary_key=True),
-                         Column('username', String),
-                         Column('name', String),
-                         Column('last_name', String),
-                         Column('email', String),
-                         Column('password_hash', String),
-                         Column('is_active', Boolean),
-                         Column('is_anonymous', Boolean),
-                         Column('is_authenticated', Boolean),
-                         Column('role', String, ForeignKey("Role.role")),
-                         Column('profile_img', String),
-                         Column('created_date', DateTime),
-                         ForeignKeyConstraint(
-                             ["role"], ["postgres.flask-sql.Role.role"], name="fk_role_type"
-                         ),
+Base = declarative_base()
 
-                         schema='public'
-                         )
+
+class Admin(Base):
+    __tablename__ = 'Admin'
+    id = Column(Uuid, primary_key=True)
+    username = Column(String)
+    name = Column(String)
+    last_name = Column(String)
+    email = Column(String)
+    password_hash = Column(String)
+    is_active = Column(Boolean)
+    is_anonymous = Column(Boolean)
+    is_authenticated = Column(Boolean)
+    profile_img = Column(String)
+    created_date = Column(DateTime)
+    # Diğer sütunlar buraya eklenir
+    role_id = Column(Integer, ForeignKey(Role.id))  # Role ile ilişkilendirme
+    role = relationship(Role)  # Role tablosu ile ilişki
 
     @staticmethod
-    def save_db(engine, data, meta_data):
+    def save_db(engine, data):
         try:
-            with engine.connect() as conn:
-                meta_data.create_all(conn, checkfirst=False)
-                Admin.patent_table.create(engine)
-                # print("aaaaaaaaaaa",a)
-                for item in data:
-                    print("item", item)
-                    print("_id",item["_id"])
-                    insert_statement = Admin.patent_table.insert().values(
-                        _id=item["_id"],
-                        username=item["username"],
-                        name=item["name"],
-                        last_name=item["last_name"],
-                        email=item["email"],
-                        password_hash=item["password_hash"],
-                        is_active=item["is_active"],
-                        is_anonymous=item["is_anonymous"],
-                        is_authenticated=item["is_authenticated"],
-                        created_date=item["created_date"],
-                        profile_img=item["profile_img"],
-                        role=item["role"]
-                    )
-                    print("insert_statement", insert_statement, type(insert_statement))
-                    conn.execute(insert_statement)
-                conn.commit()
-            return True
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            for i in data:
+                session.add(**i)
+                session.commit()
         except Exception as ex:
-            print("exxxxxxxxx", ex)
-            return False
+            print("EXXXXXXXXXX",ex)
+        # try:
+        #     with engine.connect() as conn:
+        #         meta_data.create_all(conn, checkfirst=False)
+        #         Admin.patent_table.create(engine)
+        #         # print("aaaaaaaaaaa",a)
+        #         for item in data:
+        #             print("item", item)
+        #             print("_id",item["_id"])
+        #             insert_statement = Admin.patent_table.insert().values(
+        #                 _id=item["_id"],
+        #                 username=item["username"],
+        #                 name=item["name"],
+        #                 last_name=item["last_name"],
+        #                 email=item["email"],
+        #                 password_hash=item["password_hash"],
+        #                 is_active=item["is_active"],
+        #                 is_anonymous=item["is_anonymous"],
+        #                 is_authenticated=item["is_authenticated"],
+        #                 created_date=item["created_date"],
+        #                 profile_img=item["profile_img"],
+        #                 role=item["role"]
+        #             )
+        #             print("insert_statement", insert_statement, type(insert_statement))
+        #             conn.execute(insert_statement)
+        #         conn.commit()
+        #     return True
+        # except Exception as ex:
+        #     print("exxxxxxxxx", ex)
+        #     return False
 
 # @dataclass
 # class Admin(db.Model):

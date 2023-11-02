@@ -13,15 +13,15 @@ from sqlalchemy.types import Integer, String, DateTime
 # app = createApp()
 # createDB()
 
-engine = create_engine('postgresql+psycopg2://ezgi:123456@localhost/flask-sql', echo=True)
+engine = create_engine('postgresql+psycopg2://postgres:Annem-1979@localhost/postgres', echo=True)
 
 print("engine", engine)
 meta = MetaData()
 # patent_table = Admin().patent_table
-data = AdminControllers(database_name="Prisma", collection_name="Admin").get_all_data_in_admin()
-print("data1", data)
-# data = [{"_id": 1, "role": "admin"}, {"_id": 2, "role": "user"}, {"_id": 3, "role": "superadmin"}]
-admin1 = Admin.save_db(engine=engine, data=data, meta_data = meta)
+# data = AdminControllers(database_name="Prisma", collection_name="Admin").get_all_data_in_admin()
+# print("data1", data)
+data = [{"_id": 1, "role": "admin"}, {"_id": 2, "role": "user"}, {"_id": 3, "role": "superadmin"}]
+admin1 = Admin.save_db(engine=engine, data=data)
 
 # with engine.connect() as conn:
 #     patent_table.create(engine)
