@@ -57,5 +57,5 @@ class MongoRouterClient:
         if MongoRouterClient.__instance != None:
             raise Exception("This class is a singleton!")
         else:
-            MongoRouterClient.__instance = pymongo.MongoClient("127.0.0.1:27017", connect=False, serverSelectionTimeoutMS=2000)
+            MongoRouterClient.__instance = pymongo.MongoClient("192.168.0.85:27017", connect=False, serverSelectionTimeoutMS=2000)
 # ,username=os.getenv('username_root'), password=os.getenv('password_root')

@@ -11,16 +11,18 @@ Base = declarative_base()
 class Role(Base):
     __tablename__ = 'Role'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    role = Column(String)
 
 
     @staticmethod
     def save_db(engine, data):
         try:
+            Base.metadata.create_all(engine, checkfirst=True)
             Session = sessionmaker(bind=engine)
             session = Session()
             for i in data:
-                session.add(**i)
+                my_model = Role(**i)
+                session.add(my_model)
                 session.commit()
         except Exception as ex:
             print("EXXXXXXXXXX",ex)

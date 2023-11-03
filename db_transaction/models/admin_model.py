@@ -13,7 +13,7 @@ Base = declarative_base()
 
 class Admin(Base):
     __tablename__ = 'Admin'
-    id = Column(Uuid, primary_key=True)
+    _id = Column(String, primary_key=True)
     username = Column(String)
     name = Column(String)
     last_name = Column(String)
@@ -31,10 +31,12 @@ class Admin(Base):
     @staticmethod
     def save_db(engine, data):
         try:
+            Base.metadata.create_all(engine, checkfirst=True)
             Session = sessionmaker(bind=engine)
             session = Session()
             for i in data:
-                session.add(**i)
+                my_model = Admin(**i)
+                session.add(my_model)
                 session.commit()
         except Exception as ex:
             print("EXXXXXXXXXX",ex)
