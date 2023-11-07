@@ -9,7 +9,8 @@ from db_transaction.models.admin_model import Admin
 from sqlalchemy import create_engine
 from sqlalchemy import MetaData, Table, Column
 from sqlalchemy.types import Integer, String, DateTime
-from db_transaction.models.admin_model import Role
+# from db_transaction.models.admin_model import Role
+from db_transaction.models.role_model import Role
 # app = createApp()
 # createDB()
 
@@ -17,14 +18,18 @@ engine = create_engine('postgresql+psycopg2://postgres:Annem-1979@localhost/post
 
 print("engine", engine)
 # patent_table = Admin().patent_table
-data = AdminControllers(database_name="Users", collection_name="Admin").get_all_data_in_admin()
-print("data1", data)
+# data = AdminControllers(database_name="Users", collection_name="Admin").get_all_data_in_admin()
+# print("data1", data)
 # data = [{"id": 1, "role": "admin"}, {"id": 2, "role": "user"}, {"id": 3, "role": "superadmin"}]
-data = [{'_id': '62f610a26b6929d0489342f9', 'username': 'ali', 'name': 'Ali', 'email': 'tekin.mertcan@yahoo.com',
-         'last_name': 'Tekin', 'password_hash': 'e10adc3949ba59abbe56e057f20f883e', 'is_active': False,
-         'is_anonymous': False, 'is_authenticated': True, 'role': Role(role= 'admin'),
-         'profile_img': '_FileServer_Datagenics_2022-12_27-10/ali62f610a26b6929d0489342f9.png',
-         'created_date': '12.08.2022 11:34:42'}]
+# data = [{'_id': '62f610a26b6929d0489342f9', 'username': 'ali', 'name': 'Ali', 'email': 'tekin.mertcan@yahoo.com',
+#          'last_name': 'Tekin', 'password_hash': 'e10adc3949ba59abbe56e057f20f883e', 'is_active': False,
+#          'is_anonymous': False, 'is_authenticated': True, 'role': Role(role= 'admin'),
+#          'profile_img': '_FileServer_Datagenics_2022-12_27-10/ali62f610a26b6929d0489342f9.png',
+#          'created_date': '12.08.2022 11:34:42'}]
+data = [{"id": 1, "role": "admin", "type":"bismillahirrahmanirrahim"}]
+admin1 = Role.save_db(engine=engine, data=data)
+# a = Role.upgrade()
+
         # {'_id': '62fa1352987387c83c75efbb', 'username': 'mustafa', 'name': 'Mustafa',
         #  'email': 'mustafacnar63@gmail.com', 'last_name': 'çınar', 'password_hash': 'a45958517604f5cd90d6ee51ad9cfdb6',
         #  'is_active': False, 'is_anonymous': False, 'is_authenticated': True, 'role': Role(role= 'admin'),
@@ -103,7 +108,6 @@ data = [{'_id': '62f610a26b6929d0489342f9', 'username': 'ali', 'name': 'Ali', 'e
         #  'last_name': 'gun', 'password_hash': '56d78f3e35f4dce96d90a5d751ea8734', 'is_active': True,
         #  'is_anonymous': False, 'is_authenticated': True, 'role': Role(role= 'admin'), 'profile_img': '',
         #  'created_date': '21.08.2023 10:12:25'}]
-admin1 = Admin.save_db(engine=engine, data=data)
 
 # with engine.connect() as conn:
 #     patent_table.create(engine)

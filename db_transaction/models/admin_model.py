@@ -40,6 +40,8 @@ class Admin(Base):
                 session.commit()
         except Exception as ex:
             print("EXXXXXXXXXX",ex)
+
+
         # try:
         #     with engine.connect() as conn:
         #         meta_data.create_all(conn, checkfirst=False)
