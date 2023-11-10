@@ -20,14 +20,13 @@ print("engine", engine)
 # patent_table = Admin().patent_table
 # data = AdminControllers(database_name="Users", collection_name="Admin").get_all_data_in_admin()
 # print("data1", data)
-# data = [{"id": 1, "role": "admin"}, {"id": 2, "role": "user"}, {"id": 3, "role": "superadmin"}]
-# data = [{'_id': '62f610a26b6929d0489342f9', 'username': 'ali', 'name': 'Ali', 'email': 'tekin.mertcan@yahoo.com',
-#          'last_name': 'Tekin', 'password_hash': 'e10adc3949ba59abbe56e057f20f883e', 'is_active': False,
-#          'is_anonymous': False, 'is_authenticated': True, 'role': Role(role= 'admin'),
-#          'profile_img': '_FileServer_Datagenics_2022-12_27-10/ali62f610a26b6929d0489342f9.png',
-#          'created_date': '12.08.2022 11:34:42'}]
-data = [{"id": 1, "role": "admin", "type":"bismillahirrahmanirrahim"}]
-admin1 = Role.save_db(engine=engine, data=data)
+# data = [{"role": "admin"}, {"role": "user"}, {"role": "superadmin"}]
+data = [{'_id': '62fa1352987387c83c75efbb', 'username': 'ali', 'name': 'Ali', 'email': 'tekin.mertcan@yahoo.com',
+         'last_name': 'Tekin', 'password_hash': 'e10adc3949ba59abbe56e057f20f883e', 'is_active': False,
+         'is_anonymous': False, 'is_authenticated': True, 'role':'admin',
+         'profile_img': '_FileServer_Datagenics_2022-12_27-10/ali62f610a26b6929d0489342f9.png',
+         'created_date': '12.08.2022 11:34:42'}]
+admin1 = Admin.save_db(engine=engine, data=data)
 # a = Role.upgrade()
 
         # {'_id': '62fa1352987387c83c75efbb', 'username': 'mustafa', 'name': 'Mustafa',

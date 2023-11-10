@@ -56,21 +56,59 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Boole
 # session.add(new_admin)
 # session.commit()
 
-from sqlalchemy import create_engine, Column, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+# from sqlalchemy import create_engine, Column, String
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import sessionmaker
+#
+# engine = create_engine('postgresql+psycopg2://postgres:Annem-1979@localhost/postgres', echo=True)
+# Session = sessionmaker(bind=engine)
+# session = Session()
+#
+# Base = declarative_base()
+#
+# class Role(Base):
+#     __tablename__ = 'Role'
+#     id = Column(Integer, primary_key=True)
+#     role = Column(String)
+#     # Diğer mevcut sütunlar...
+#     type = Column(String)  # Yeni kolon ekleniyor
+#
+# Base.metadata.create_all(engine)
 
-engine = create_engine('postgresql+psycopg2://postgres:Annem-1979@localhost/postgres', echo=True)
-Session = sessionmaker(bind=engine)
-session = Session()
 
-Base = declarative_base()
+from sqlalchemy.orm.exc import NoResultFound
 
-class Role(Base):
-    __tablename__ = 'Role'
-    id = Column(Integer, primary_key=True)
-    role = Column(String)
-    # Diğer mevcut sütunlar...
-    type = Column(String)  # Yeni kolon ekleniyor
+class Admin(Base):
+    # ... (diğer sütunlar)
+    role_id = Column(Integer, ForeignKey('Role.id'))  # Role ile ilişkilendirme
+    role = relationship('Role')  # Role tablosu ile ilişki
 
-Base.metadata.create_all(engine)
+    @staticmethod
+    def save_db(engine, data):
+        try:
+            Base.metadata.create_all(engine, checkfirst=True)
+            Session = sessionmaker(bind=engine)
+            session = Session()
+
+            for i in data:
+                role_name = i['role']
+                existing_role = session.query(Role).filter_by(role=role_name).first()
+
+                if existing_role is not None:
+                    role_id = existing_role.id
+                    i["role_id"] = role_id
+
+                my_model = Admin(**i)
+                session.add(my_model)
+                session.commit()
+        except Exception as ex:
+            print("EXXXXXXXXXX", ex)
+
+# Kullanım örneği
+data = [{'_id': '62f610a26b6929d0489342f9', 'username': 'ali', 'name': 'Ali', 'email': 'tekin.mertcan@yahoo.com',
+         'last_name': 'Tekin', 'password_hash': 'e10adc3949ba59abbe56e057f20f883e', 'is_active': False,
+         'is_anonymous': False, 'is_authenticated': True, 'role': 'admin',
+         'profile_img': '_FileServer_Datagenics_2022-12_27-10/ali62f610a26b6929d0489342f9.png',
+         'created_date': '12.08.2022 11:34:42'}]
+
+Admin.save_db(engine=engine, data=data)
