@@ -13,6 +13,7 @@ import sqlalchemy as sa
 Base = declarative_base()
 
 
+#DATAGENICS ROLE
 class Role(Base):
     __tablename__ = 'Role'
     id = Column(Integer, Sequence('role_id_seq'), primary_key=True, autoincrement=True)
@@ -26,9 +27,6 @@ class Role(Base):
             Session = sessionmaker(bind=engine)
             session = Session()
             for i in data:
-                # role_name = i["role"]
-                # existing_role = session.query(Role).filter_by(role=role_name).first()
-                # if existing_role is None :
                 my_model = Role(**i)
                 session.add(my_model)
                 session.commit()

@@ -1,7 +1,5 @@
-from dataclasses import dataclass
-# from db_transaction import db
-from sqlalchemy import MetaData, Table, Column, ForeignKey, ForeignKeyConstraint
-from sqlalchemy.types import Integer, String, DateTime, Boolean, Uuid
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.types import String, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -27,7 +25,6 @@ class Admin(Base):
     # Diğer sütunlar buraya eklenir
     role_id = Column(ForeignKey(Role.id))  # Role ile ilişkilendirme
     admins = relationship(Role, backref="Admins")
-    # role = relationship(Role)  # Role tablosu ile ilişki
 
     @staticmethod
     def save_db(engine, data):
@@ -37,17 +34,13 @@ class Admin(Base):
 
             session = Session()
             for i in data:
-                role_name = vars(i['role'])['role']
-                print("role_name",role_name)
+                # role_name = vars(i['role'])['role']
+                role_name = i['role']
                 existing_role = session.query(Role).filter_by(role=role_name).first()
-                print("exi",existing_role)
                 if existing_role is not None:
-                    print("if")
                     role_id = existing_role.id
                     i["role_id"] = role_id
-                print("i",i)
                 i.pop('role')
-                print("i2",i)
                 my_model = Admin(**i)
                 session.add(my_model)
                 session.commit()
