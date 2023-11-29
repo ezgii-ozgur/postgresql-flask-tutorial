@@ -25,8 +25,9 @@ class Admin(Base):
     profile_img = Column(String)
     created_date = Column(DateTime)
     # Diğer sütunlar buraya eklenir
-    role_id = Column(Integer, ForeignKey(Role.id))  # Role ile ilişkilendirme
-    role = relationship(Role)  # Role tablosu ile ilişki
+    role_id = Column(ForeignKey(Role.id))  # Role ile ilişkilendirme
+    admins = relationship(Role, backref="Admins")
+    # role = relationship(Role)  # Role tablosu ile ilişki
 
     @staticmethod
     def save_db(engine, data):
@@ -36,13 +37,17 @@ class Admin(Base):
 
             session = Session()
             for i in data:
-                role_name = i['role']
+                role_name = vars(i['role'])['role']
+                print("role_name",role_name)
                 existing_role = session.query(Role).filter_by(role=role_name).first()
-
+                print("exi",existing_role)
                 if existing_role is not None:
+                    print("if")
                     role_id = existing_role.id
                     i["role_id"] = role_id
                 print("i",i)
+                i.pop('role')
+                print("i2",i)
                 my_model = Admin(**i)
                 session.add(my_model)
                 session.commit()
