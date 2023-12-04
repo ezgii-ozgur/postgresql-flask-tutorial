@@ -7,7 +7,7 @@ Base = declarative_base()
 
 class DefaultCommunication(Base):
     __tablename__ = 'DefaultCommunication'
-
+    _id = Column(String, primary_key=True)
     csrf_token = Column(String)
     ethernet_ip_1 = Column(String)
     ethernet_ip_2 = Column(String)

@@ -22,7 +22,6 @@ class Admin(Base):
     is_authenticated = Column(Boolean)
     profile_img = Column(String)
     created_date = Column(DateTime)
-    # Diğer sütunlar buraya eklenir
     role_id = Column(ForeignKey(Role.id))  # Role ile ilişkilendirme
     admins = relationship(Role, backref="Admins")
 
